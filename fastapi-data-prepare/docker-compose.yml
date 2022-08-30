@@ -1,0 +1,24 @@
+version: "3.0"
+services : 
+  ckan_dataconnect_dp :
+    container_name: dataprepare-ckan
+    image: porrametict/dataprepare-ckan:${VERSION}
+    build : .
+    env_file:
+      - .env
+    environment:
+      - CKAN_SITE_URL=${CKAN_SITE_URL}
+      - CKAN_SYSADMIN_API_KEY=${CKAN_SYSADMIN_API_KEY}
+    ports : 
+      - "8000:8000"
+    extra_hosts:
+    - "host.docker.internal:host-gateway"  # use host.docker.interal instead of localhost
+    networks:
+      dp_net:
+        aliases:
+          - dp-server
+    
+networks:
+  dp_net:
+    external :
+      name : bsnet
