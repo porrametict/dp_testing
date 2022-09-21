@@ -4,7 +4,7 @@ import write_csv
 
 import logging
 import json
-from code_me.json.prepare_json import json_main
+# from code_me.json.prepare_json import json_main
 import write_csv
 import cProfile, pstats, io
 import psutil
@@ -13,6 +13,8 @@ import json
 from pstats import SortKey
 import re
 import os
+
+from json_path.json_filter import json_main
 logger = logging.getLogger(__name__)
 
 def read_file(fname):
@@ -22,35 +24,33 @@ def read_file(fname):
     f.close()
     return data
 
+# def convert_size(size_bytes):
+#    if size_bytes == 0:
+#        return "0B"
+#    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+#    i = int(math.floor(math.log(size_bytes, 1024)))
+#    p = math.pow(1024, i)
+#    s = round(size_bytes / p, 2)
+#    return "%s %s" % (s, size_name[i])
+
 def convert_size(size_bytes):
-   if size_bytes == 0:
-       return "0B"
-   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-   i = int(math.floor(math.log(size_bytes, 1024)))
-   p = math.pow(1024, i)
-   s = round(size_bytes / p, 2)
-   return "%s %s" % (s, size_name[i])
-
-
-def code_me(data):
-    jsonpath_expr = parse('$.[*]')
-    return [match.value for match in jsonpath_expr.find(data)] 
-
+    return f"{(size_bytes / (1024*1024)):.2f}"  #MB
+# @profile
 def test_main (n_records) :
     f_name = f"output/normal_{n_records}.json"
     f_stats = os.stat(f_name)
     data = read_file(f_name)
 
-
+    PPATH = "$.[*].field1.address"
+    PPATH = ""
     def eiei ():
-        code_me(data)
+        json_main({"data":data,"param":{"data":PPATH}},logger)
 
     pr = cProfile.Profile()
     pr.enable()
+    # eiei()
     process = psutil.Process(eiei())
     mem  = process.memory_info().rss
-    # json_main(s_data,logger)
-    # print(result)
     pr.disable()
     s = io.StringIO()
     ps = pstats.Stats(pr, stream=s).sort_stats('tottime')
@@ -61,10 +61,6 @@ def test_main (n_records) :
 
     used_time = r_result.group(1) # process time in seconds
 
-
-
-    # with open(f'json_test_results/{n_records}.txt', 'w+') as f:
-    #     f.write(pf)
     
     used_mem = mem
 
@@ -74,8 +70,9 @@ def test_main (n_records) :
 
 
 if __name__ == "__main__":
-    
-    for i in range(1000,100000+1000,1000):
+#    results =  test_main(1000000) 
+#    print(results)
+    for i in range(640000,1000000+10000,10000):
         print("Testing : " + str(i))
         result = test_main(i)
         write_csv.write_result(result)

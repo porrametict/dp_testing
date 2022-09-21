@@ -1,0 +1,43 @@
+{
+    "data": [
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        },
+        {
+            "test": "value"
+        }
+    ],
+    "schema": [
+        {
+            "selected": true,
+            "field": "test",
+            "type": "text",
+            "example_data": "value",
+            "description": ""
+        }
+    ]
+}

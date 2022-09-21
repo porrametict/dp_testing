@@ -105,5 +105,6 @@ if __name__ == '__main__':
     # n_layers_dict(450)
     # n_nested_la
     # yers_n_dict(8)
-    for i in range(1000,200000+1000,1000):
-        normal_json(200000)
+    for i in range(10000,1000000+10000,10000):
+        print("start ",i)
+        normal_json(i)
